@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
@@ -43,6 +43,9 @@ public class BootloopButton : MonoBehaviour
     public int task4Index;
     public int task5Index;
 
+    [Header("Assessment Uploader")]
+    public AssessmentUploader assessmentUploader;
+
     [Header("Completion UI & Sound")]
     public GameObject completionUIPanel;
     public AudioSource completionSound;
@@ -66,8 +69,7 @@ public class BootloopButton : MonoBehaviour
     [Header("Countdown Display")]
     public TextMeshProUGUI countdownText;
 
-    [HideInInspector]
-    public bool allowTask2 = false;
+    [HideInInspector] public bool allowTask2 = false;
 
     private Vector3 originalPosition;
     private XRBaseInteractable interactable;
@@ -94,14 +96,12 @@ public class BootloopButton : MonoBehaviour
     void Start()
     {
         originalPosition = transform.localPosition;
-
         interactable = GetComponent<XRBaseInteractable>();
         interactable.selectEntered.AddListener(OnGrabbed);
         interactable.selectExited.AddListener(OnReleased);
 
         if (uiButton2 != null)
             uiButton2.onClick.AddListener(OnUIButton2Clicked);
-
         if (uiButton1 != null)
             uiButton1.onClick.AddListener(OnUIButton1Clicked);
 
@@ -120,15 +120,15 @@ public class BootloopButton : MonoBehaviour
             holdProgressSlider.gameObject.SetActive(false);
         }
 
-        if (completionUIPanel != null) completionUIPanel.SetActive(false);
-        if (popupAfterTask1 != null) popupAfterTask1.SetActive(false);
-        if (lateWarningPopup != null) lateWarningPopup.SetActive(false);
+        if (completionUIPanel) completionUIPanel.SetActive(false);
+        if (popupAfterTask1) popupAfterTask1.SetActive(false);
+        if (lateWarningPopup) lateWarningPopup.SetActive(false);
 
-        if (lateTimeText != null) lateTimeText.gameObject.SetActive(false);
-        if (lateStepsText != null) lateStepsText.gameObject.SetActive(false);
-        if (lateSummaryText != null) lateSummaryText.gameObject.SetActive(false);
-        if (lateResultText != null) lateResultText.gameObject.SetActive(false);
-        if (countdownText != null) countdownText.gameObject.SetActive(false);
+        if (lateTimeText) lateTimeText.gameObject.SetActive(false);
+        if (lateStepsText) lateStepsText.gameObject.SetActive(false);
+        if (lateSummaryText) lateSummaryText.gameObject.SetActive(false);
+        if (lateResultText) lateResultText.gameObject.SetActive(false);
+        if (countdownText) countdownText.gameObject.SetActive(false);
 
         if (lightningSocket != null)
         {
@@ -149,7 +149,6 @@ public class BootloopButton : MonoBehaviour
 
         if (volumeUpButton != null)
             volumeUpButton.GetComponent<XRBaseInteractable>().selectEntered.AddListener((_) => volumeUpTriggered = true);
-
         if (volumeDownButton != null)
             volumeDownButton.GetComponent<XRBaseInteractable>().selectEntered.AddListener((_) => volumeDownTriggered = true);
     }
@@ -159,8 +158,7 @@ public class BootloopButton : MonoBehaviour
         if (isLongHolding)
         {
             holdTimer += Time.deltaTime;
-
-            if (holdProgressSlider != null && holdTimer >= 1f)
+            if (holdProgressSlider && holdTimer >= 1f)
             {
                 holdProgressSlider.gameObject.SetActive(true);
                 holdProgressSlider.value = Mathf.Min(holdTimer, 5f);
@@ -177,7 +175,7 @@ public class BootloopButton : MonoBehaviour
         {
             bootloopTimer += Time.deltaTime;
 
-            if (countdownText != null && bootloopTimer <= bootloopTimeLimit)
+            if (countdownText && bootloopTimer <= bootloopTimeLimit)
             {
                 float remaining = Mathf.Clamp(bootloopTimeLimit - bootloopTimer, 0, bootloopTimeLimit);
                 int minutes = Mathf.FloorToInt(remaining / 60);
@@ -188,40 +186,41 @@ public class BootloopButton : MonoBehaviour
             if (bootloopTimer >= bootloopTimeLimit && GetCompletedCount() < 5)
             {
                 latePopupShown = true;
+                if (lateWarningPopup) lateWarningPopup.SetActive(true);
+                if (failSound) failSound.Play();
+                if (countdownText) countdownText.gameObject.SetActive(false);
 
-                if (lateWarningPopup != null)
-                    lateWarningPopup.SetActive(true);
-
-                if (failSound != null)
-                    failSound.Play();
-
-                if (countdownText != null)
-                    countdownText.gameObject.SetActive(false);
-
-                if (lateTimeText != null)
+                if (lateTimeText)
                 {
                     lateTimeText.gameObject.SetActive(true);
-                    int min = Mathf.FloorToInt(bootloopTimer / 60);
-                    int sec = Mathf.FloorToInt(bootloopTimer % 60);
-                    lateTimeText.text = $"Time Taken: {min:00}:{sec:00}";
+                    lateTimeText.text = $"{Mathf.FloorToInt(bootloopTimer / 60):00}:{Mathf.FloorToInt(bootloopTimer % 60):00}";
                 }
 
-                if (lateStepsText != null)
+                if (lateStepsText)
                 {
                     lateStepsText.gameObject.SetActive(true);
                     lateStepsText.text = GetCompletedCount().ToString();
                 }
 
-                if (lateSummaryText != null)
+                if (lateSummaryText)
                 {
                     lateSummaryText.gameObject.SetActive(true);
                     lateSummaryText.text = GetCompletedCount() + "/5";
                 }
 
-                if (lateResultText != null)
+                if (lateResultText)
                 {
                     lateResultText.gameObject.SetActive(true);
                     lateResultText.text = "FAILED";
+                }
+
+                // 🔴 Upload failure result
+                if (assessmentUploader)
+                {
+                    string timeUsed = $"{Mathf.FloorToInt(bootloopTimer / 60):00}:{Mathf.FloorToInt(bootloopTimer % 60):00}";
+                    string taskCompleted = $"P1: {(task1Done ? "✔" : "✘")}, {(task2Done ? "✔" : "✘")}, {(task3Done ? "✔" : "✘")}, {(task4Done ? "✔" : "✘")}, {(task5Done ? "✔" : "✘")}";
+                    string score = $"{GetCompletedCount()}/5";
+                    assessmentUploader.UploadResult(timeUsed, taskCompleted, score, "FAILED");
                 }
             }
         }
@@ -231,9 +230,7 @@ public class BootloopButton : MonoBehaviour
     {
         task1Done = true;
         projectorTaskManager.MarkTaskComplete(task1Index);
-
-        if (popupAfterTask1 != null)
-            popupAfterTask1.SetActive(true);
+        if (popupAfterTask1) popupAfterTask1.SetActive(true);
     }
 
     private void CompleteTask3()
@@ -243,22 +240,20 @@ public class BootloopButton : MonoBehaviour
 
         if (uiImages.Length > 1)
         {
-            if (uiImages[0] != null) uiImages[0].gameObject.SetActive(false);
-            if (uiImages[1] != null) uiImages[1].gameObject.SetActive(true);
+            if (uiImages[0]) uiImages[0].gameObject.SetActive(false);
+            if (uiImages[1]) uiImages[1].gameObject.SetActive(true);
         }
 
-        if (uiButton2 != null) uiButton2.gameObject.SetActive(true);
+        if (uiButton2) uiButton2.gameObject.SetActive(true);
     }
 
     private void OnUIButton2Clicked()
     {
         if (!task3Done || task4Done) return;
-
         task4Done = true;
         projectorTaskManager.MarkTaskComplete(task4Index);
-
-        if (objectOnTask4 != null) objectOnTask4.SetActive(true);
-        if (uiButton2 != null) uiButton2.interactable = false;
+        if (objectOnTask4) objectOnTask4.SetActive(true);
+        if (uiButton2) uiButton2.interactable = false;
     }
 
     private void OnUIButton1Clicked()
@@ -270,48 +265,50 @@ public class BootloopButton : MonoBehaviour
 
         if (uiImages.Length > 2)
         {
-            if (uiImages[2] != null) uiImages[2].gameObject.SetActive(false);
-            if (uiImages[3] != null) uiImages[3].gameObject.SetActive(true);
+            if (uiImages[2]) uiImages[2].gameObject.SetActive(false);
+            if (uiImages[3]) uiImages[3].gameObject.SetActive(true);
         }
 
-        if (objectOnTask5 != null) objectOnTask5.SetActive(true);
-        if (uiButton1 != null) uiButton1.interactable = false;
+        if (objectOnTask5) objectOnTask5.SetActive(true);
+        if (uiButton1) uiButton1.interactable = false;
 
         if (bootloopTimerStarted && bootloopTimer <= bootloopTimeLimit && GetCompletedCount() == 5)
         {
-            if (completionUIPanel != null)
-                completionUIPanel.SetActive(true);
+            if (completionUIPanel) completionUIPanel.SetActive(true);
+            if (completionSound) completionSound.Play();
+            if (countdownText) countdownText.gameObject.SetActive(false);
 
-            if (completionSound != null)
-                completionSound.Play();
-
-            if (countdownText != null)
-                countdownText.gameObject.SetActive(false);
-
-            if (lateTimeText != null)
+            if (lateTimeText)
             {
                 lateTimeText.gameObject.SetActive(true);
-                int min = Mathf.FloorToInt(bootloopTimer / 60);
-                int sec = Mathf.FloorToInt(bootloopTimer % 60);
-                lateTimeText.text = $"{min:00}:{sec:00}";
+                lateTimeText.text = $"{Mathf.FloorToInt(bootloopTimer / 60):00}:{Mathf.FloorToInt(bootloopTimer % 60):00}";
             }
 
-            if (lateStepsText != null)
+            if (lateStepsText)
             {
                 lateStepsText.gameObject.SetActive(true);
                 lateStepsText.text = GetCompletedCount().ToString();
             }
 
-            if (lateSummaryText != null)
+            if (lateSummaryText)
             {
                 lateSummaryText.gameObject.SetActive(true);
                 lateSummaryText.text = GetCompletedCount() + "/5";
             }
 
-            if (lateResultText != null)
+            if (lateResultText)
             {
                 lateResultText.gameObject.SetActive(true);
                 lateResultText.text = "PASSED";
+            }
+
+            // ✅ Upload success result
+            if (assessmentUploader)
+            {
+                string timeUsed = $"{Mathf.FloorToInt(bootloopTimer / 60):00}:{Mathf.FloorToInt(bootloopTimer % 60):00}";
+                string taskCompleted = $"P1: ✔, ✔, ✔, ✔, ✔";
+                string score = "5/5";
+                assessmentUploader.UploadResult(timeUsed, taskCompleted, score, "PASSED");
             }
         }
     }
@@ -319,7 +316,6 @@ public class BootloopButton : MonoBehaviour
     private void OnGrabbed(SelectEnterEventArgs args)
     {
         if (isAnimating) return;
-
         StartCoroutine(AnimatePress());
         isLongHolding = true;
         holdTimer = 0f;
@@ -329,8 +325,7 @@ public class BootloopButton : MonoBehaviour
     {
         isLongHolding = false;
         holdTimer = 0f;
-
-        if (holdProgressSlider != null)
+        if (holdProgressSlider)
         {
             holdProgressSlider.value = 0f;
             holdProgressSlider.gameObject.SetActive(false);
@@ -340,11 +335,8 @@ public class BootloopButton : MonoBehaviour
     private IEnumerator AnimatePress()
     {
         isAnimating = true;
-        Vector3 pressedPosition = originalPosition + GetOffset();
-        transform.localPosition = pressedPosition;
-
+        transform.localPosition = originalPosition + GetOffset();
         yield return new WaitForSeconds(returnDelay);
-
         transform.localPosition = originalPosition;
         isAnimating = false;
     }
@@ -353,32 +345,30 @@ public class BootloopButton : MonoBehaviour
     {
         while (!task3Done)
         {
-            if (uiImages.Length > 0 && uiImages[0] != null)
+            if (uiImages.Length > 0 && uiImages[0])
                 uiImages[0].gameObject.SetActive(!uiImages[0].gameObject.activeSelf);
             yield return new WaitForSeconds(2f);
         }
-
-        if (uiImages.Length > 0 && uiImages[0] != null)
-            uiImages[0].gameObject.SetActive(false);
+        if (uiImages.Length > 0 && uiImages[0]) uiImages[0].gameObject.SetActive(false);
     }
 
     private void DisableAllUI()
     {
         foreach (var img in uiImages)
         {
-            if (img != null) img.gameObject.SetActive(false);
+            if (img) img.gameObject.SetActive(false);
         }
     }
 
     private Vector3 GetOffset()
     {
-        switch (moveAxis)
+        return moveAxis switch
         {
-            case Axis.X: return new Vector3(-moveDistance, 0, 0);
-            case Axis.Y: return new Vector3(0, -moveDistance, 0);
-            case Axis.Z: return new Vector3(0, 0, -moveDistance);
-            default: return Vector3.zero;
-        }
+            Axis.X => new Vector3(-moveDistance, 0, 0),
+            Axis.Y => new Vector3(0, -moveDistance, 0),
+            Axis.Z => new Vector3(0, 0, -moveDistance),
+            _ => Vector3.zero,
+        };
     }
 
     public void StartBootloopTimer()
@@ -387,7 +377,7 @@ public class BootloopButton : MonoBehaviour
         bootloopTimer = 0f;
         latePopupShown = false;
 
-        if (countdownText != null)
+        if (countdownText)
         {
             countdownText.gameObject.SetActive(true);
             countdownText.text = $"{(int)(bootloopTimeLimit / 60):00}:{(int)(bootloopTimeLimit % 60):00}";

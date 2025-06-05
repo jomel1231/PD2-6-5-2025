@@ -4790,7 +4790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &276140146
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4799,7 +4799,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 276140145}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0021}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 0.53154, y: 0.53154, z: 0.53154}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4807,8 +4807,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: 33.7}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -7.2, y: 37.8}
+  m_SizeDelta: {x: 200, y: 41.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &276140147
 MonoBehaviour:
@@ -9869,6 +9869,7 @@ GameObject:
   - component: {fileID: 486908435}
   - component: {fileID: 486908434}
   - component: {fileID: 486908436}
+  - component: {fileID: 486908437}
   m_Layer: 0
   m_Name: PowerButton
   m_TagString: Untagged
@@ -10121,12 +10122,13 @@ MonoBehaviour:
   task3Index: 2
   task4Index: 3
   task5Index: 4
+  assessmentUploader: {fileID: 486908437}
   completionUIPanel: {fileID: 2107553598}
   completionSound: {fileID: 1723054692}
   failSound: {fileID: 631234424}
   popupAfterTask1: {fileID: 1780656871}
   lateWarningPopup: {fileID: 2133529845}
-  bootloopTimeLimit: 120
+  bootloopTimeLimit: 1
   lateTimeText: {fileID: 276140147}
   lateStepsText: {fileID: 1626374498}
   lateResultText: {fileID: 839400528}
@@ -10149,6 +10151,19 @@ MonoBehaviour:
   incorrectPanel: {fileID: 2000828438}
   diagnosisPopup: {fileID: 541625573}
   bootloopButton: {fileID: 486908435}
+--- !u!114 &486908437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486908426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a80f7c32304b0474098dc6018455a6b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  webAppUrl: https://script.google.com/macros/s/AKfycbxRTGRO1tIIQG7dVnzL_0ucFTHChqgOI0uzJClWWEAoTMmgSK3tHpGX8Qw5AUBJCimv/exec
 --- !u!1 &494475269
 GameObject:
   m_ObjectHideFlags: 0
@@ -11192,7 +11207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &541625574
 Transform:
   m_ObjectHideFlags: 0
@@ -14174,22 +14189,27 @@ MonoBehaviour:
   - taskName: Swipe Screen
     incompleteIcon: {fileID: 252188664}
     completeIcon: {fileID: 252188664}
+    taskObject: {fileID: 0}
     isComplete: 0
   - taskName: Volume Up
     incompleteIcon: {fileID: 238208111}
     completeIcon: {fileID: 1960871702}
+    taskObject: {fileID: 0}
     isComplete: 0
   - taskName: Volume Down
     incompleteIcon: {fileID: 1568994704}
     completeIcon: {fileID: 1811616655}
+    taskObject: {fileID: 0}
     isComplete: 0
   - taskName: Power Button
     incompleteIcon: {fileID: 0}
     completeIcon: {fileID: 0}
+    taskObject: {fileID: 0}
     isComplete: 0
   - taskName: Checking
     incompleteIcon: {fileID: 0}
     completeIcon: {fileID: 0}
+    taskObject: {fileID: 0}
     isComplete: 0
   stepTitleText: {fileID: 0}
   stepDescriptionText: {fileID: 0}
@@ -17883,7 +17903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &839400527
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17892,7 +17912,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 839400526}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0012}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 0.53154, y: 0.53154, z: 0.53154}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17900,7 +17920,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -48, y: -22.3}
+  m_AnchoredPosition: {x: -51, y: -23.2}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &839400528
@@ -24439,7 +24459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1141347567
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24448,7 +24468,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141347566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0022}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.53154, y: 0.53154, z: 0.53154}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24456,7 +24476,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.9, y: -40.9}
+  m_AnchoredPosition: {x: 1.5, y: -43.1}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1141347568
@@ -34966,7 +34986,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1626374497
 RectTransform:
   m_ObjectHideFlags: 0
@@ -34975,7 +34995,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1626374496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.001}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.53154, y: 0.53154, z: 0.53154}
   m_ConstrainProportionsScale: 0
   m_Children: []

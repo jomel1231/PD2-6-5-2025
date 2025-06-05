@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -32,6 +32,9 @@ public class ProgressTracker : MonoBehaviour
     [Header("UI Button to Enable When Primary Tasks Done")]
     public Button primaryTasksDoneButton;
 
+    [Header("Google Sheets Uploader")]
+    public AssessmentUploader uploader;
+
     private float timer = 0f;
     private bool resultShown = false;
 
@@ -39,7 +42,7 @@ public class ProgressTracker : MonoBehaviour
     {
         timer = 0f;
         resultShown = false;
-        enabled = false; // Only runs when StartAssessmentTimer() is called
+        enabled = false;
 
         if (completionUIPanel) completionUIPanel.SetActive(false);
         if (passPanel) passPanel.SetActive(false);
@@ -57,7 +60,6 @@ public class ProgressTracker : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        // Update countdown timers
         float remaining = Mathf.Clamp(timeLimit - timer, 0f, timeLimit);
         int minutes = Mathf.FloorToInt(remaining / 60f);
         int seconds = Mathf.FloorToInt(remaining % 60f);
@@ -75,7 +77,6 @@ public class ProgressTracker : MonoBehaviour
             countdownText2.text = formattedTime;
         }
 
-        // Count completed tasks
         int completedTasks = 0;
         foreach (var task in projectorTaskManager1.taskList)
         {
@@ -88,7 +89,6 @@ public class ProgressTracker : MonoBehaviour
 
         int totalTasks = projectorTaskManager1.taskList.Count + projectorTaskManager2.taskList.Count;
 
-        // Enable button only when primary projector's tasks are all complete
         if (primaryTasksDoneButton != null && !primaryTasksDoneButton.interactable)
         {
             bool allPrimaryDone = true;
@@ -105,7 +105,6 @@ public class ProgressTracker : MonoBehaviour
                 primaryTasksDoneButton.interactable = true;
         }
 
-        // Show result if completed or time expired
         if (completedTasks == totalTasks)
         {
             ShowResultPanel(true, completedTasks, totalTasks);
@@ -138,10 +137,13 @@ public class ProgressTracker : MonoBehaviour
 
         int usedMin = Mathf.FloorToInt(timer / 60);
         int usedSec = Mathf.FloorToInt(timer % 60);
-        if (timeUsedText) timeUsedText.text = $"Time Used: {usedMin:00}:{usedSec:00}";
+        if (timeUsedText) timeUsedText.text = $"{usedMin:00}:{usedSec:00}";
+
+        string completedText = "";
 
         if (passed)
         {
+            completedText = GenerateCompletedTaskIndexSummary();
             if (tasksCompletedText) tasksCompletedText.text = $"{completedTasks}";
         }
         else
@@ -172,6 +174,8 @@ public class ProgressTracker : MonoBehaviour
                 incompleteText += $"P2 - #{string.Join(", #", p2Missing)}";
             }
 
+            completedText = incompleteText;
+
             if (tasksCompletedText) tasksCompletedText.text = incompleteText;
         }
 
@@ -185,5 +189,45 @@ public class ProgressTracker : MonoBehaviour
 
         if (countdownText1) countdownText1.gameObject.SetActive(false);
         if (countdownText2) countdownText2.gameObject.SetActive(false);
+
+        // ✅ Upload to Google Sheets
+        if (uploader != null)
+        {
+            string timeUsedFormatted = $"{usedMin:00}:{usedSec:00}";
+            string scoreFormatted = $"{completedTasks}/{totalTasks}";
+            string resultText = passed ? "PASSED" : "FAILED";
+
+            uploader.UploadResult(timeUsedFormatted, completedText, scoreFormatted, resultText);
+        }
+    }
+
+    private string GenerateCompletedTaskIndexSummary()
+    {
+        List<int> p1 = new List<int>();
+        List<int> p2 = new List<int>();
+
+        for (int i = 0; i < projectorTaskManager1.taskList.Count; i++)
+        {
+            if (projectorTaskManager1.taskList[i].isComplete)
+                p1.Add(i + 1);
+        }
+
+        for (int i = 0; i < projectorTaskManager2.taskList.Count; i++)
+        {
+            if (projectorTaskManager2.taskList[i].isComplete)
+                p2.Add(i + 1);
+        }
+
+        string summary = "";
+        if (p1.Count > 0)
+            summary += $"P1 - #{string.Join(", #", p1)}";
+
+        if (p2.Count > 0)
+        {
+            if (!string.IsNullOrEmpty(summary)) summary += " | ";
+            summary += $"P2 - #{string.Join(", #", p2)}";
+        }
+
+        return summary;
     }
 }

@@ -7,29 +7,27 @@ public class ProjectorTaskManager : MonoBehaviour
     [System.Serializable]
     public class Task
     {
-        public string taskName;
-        public GameObject incompleteIcon;
-        public GameObject completeIcon;
-        [HideInInspector] public bool isComplete;
+        public string taskName;                   // Optional label for identifying the task
+        public GameObject incompleteIcon;         // Red X icon or similar
+        public GameObject completeIcon;           // Green check icon
+        public GameObject taskObject;             // ✅ Link to the actual UI object (e.g., Remove Battery)
+
+        [HideInInspector] public bool isComplete; // Tracks if task is complete
     }
 
-    // List of tasks (each may have separate visual icons)
+    [Header("Task List")]
     public List<Task> taskList = new List<Task>();
 
-    // UI elements for displaying step details.
+    [Header("Step UI Elements")]
     public Text stepTitleText;
     public Text stepDescriptionText;
 
-    // The panel that contains the diagnose pop-out (should be hidden at start)
+    [Header("Diagnosis UI")]
     public GameObject diagnosePanel;
-
-    // The original button that triggers the diagnose pop-out.
     public Button popoutTriggerButton;
-
-    // The next button within the diagnose panel (optional, if used)
     public Button nextButton;
 
-    // Reference to any additional manager (e.g., for proceeding after diagnosis)
+    [Header("Optional Manager Link")]
     public PhoneUIStateManager phoneUIStateManager;
 
     /// <summary>
