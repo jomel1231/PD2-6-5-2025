@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 182d6244fb8d5d547929025154fbf387
+  - enabled: 1
+    path: Assets/Scenes/Tutorial Scene.unity
+    guid: 8bfc9b545067ec14282fcf8e2f6e431b
+  - enabled: 1
+    path: Assets/Scenes/Pre-Assessment.unity
+    guid: f6b24042ccfe0f24493ec16faeeba38e
+  - enabled: 1
+    path: Assets/Scenes/Information Scene.unity
+    guid: 4f542faa893ba3c42a944ddc34c919e0
+  - enabled: 1
+    path: Assets/Scenes/Task Menu.unity
+    guid: 5a24eb43a01228b49a97924bfb9af926
+  - enabled: 0
+    path: Assets/Scenes/ScreenDiagnost.unity
+    guid: 613c4963e4b8101429306ebf71b60e17
+  - enabled: 0
+    path: Assets/Scenes/Charger Port Diagnostics.unity
+    guid: 7dfb1cd91102f0f4480cabcd57d38a3c
+  - enabled: 0
+    path: Assets/Scenes/Battery Issue Diagnose and Repair Training.unity
+    guid: f52bf19279055b9448418ec8933a2a35
+  - enabled: 1
+    path: Assets/Scenes/Software Bootloop Training.unity
+    guid: 17500116dddf20645be1f031f34036c4
+  - enabled: 1
+    path: Assets/Scenes/Assessment Task.unity
+    guid: 04c8e6a635f81984cb64af0aed505986
+  - enabled: 0
+    path: Assets/Scenes/Tutorial Disassembly.unity
+    guid: eccb2bc76074b2849b626b75e749890d
+  - enabled: 1
+    path: Assets/Scenes/Battery Replacement Diagnose and Repair Assesment.unity
+    guid: b28c54437d69c384dbbae8a7d00d78fd
+  - enabled: 1
+    path: Assets/Scenes/Battery Replacement Diagnose and Repair Training.unity
+    guid: bd497b5d002e42f449f11901ee12685c
+  - enabled: 1
+    path: Assets/Scenes/Screen  Replacement Diagnose and Repair Training.unity
+    guid: a3da67b61657e444d925b6ae426cd0cd
+  - enabled: 1
+    path: Assets/Scenes/Software Bootloop Assesment.unity
+    guid: f4e10cda307544947abe7e14d5640f16
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2238d457089b9494896515a25debf01c,
+      type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b66a7276bf7d20d4fafa16c6e7be4a66,
+      type: 3}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: b6f03c3b187e4a44f9ba31abf275f3b6,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: d46af47ef96b00a49825a3c49181afa0,
+      type: 2}
